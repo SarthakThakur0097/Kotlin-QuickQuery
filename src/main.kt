@@ -7,6 +7,8 @@ fun main(args: Array<String>)
     val scan = Scanner(System.`in`)
     var menuChoice: String
 
+    var query: Queries = Queries()
+    query.openFile("/MaleFirstNames.Txt")
     print("Press any key to create a table\n")
     menuChoice = scan.nextLine()
 
