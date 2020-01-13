@@ -8,7 +8,9 @@ fun main(args: Array<String>)
     var menuChoice: String
 
     var query: Queries = Queries()
-    query.openFile("/MaleFirstNames.Txt")
+    query.openFile("/Users/Sarthak/Documents/IntelliJ/Kotlin-QuickQuery/resources/MaleFirstNames.Txt")
+    query.readFile("MaleFirstNames.Txt")
+    query.closeFile()
     print("Press any key to create a table\n")
     menuChoice = scan.nextLine()
 
