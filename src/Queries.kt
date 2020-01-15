@@ -73,15 +73,13 @@ class Queries
         return myTableSkeleton
     }
 
-    fun myListIterator(entities: ArrayList<String>): String
+    private fun myListIterator(entities: ArrayList<String>): String
     {
         var myIterator: Iterator<String> = entities.iterator()
         var myBuilder: StringBuilder = StringBuilder()
         var size: Int = entities.size
-        var counter: Int = 0
-        for(x in entities)
+        for((counter) in entities.withIndex())
         {
-
             if(counter==(size-1))
             {
                 myBuilder.append(entities[counter] + ");" )
@@ -91,20 +89,18 @@ class Queries
             {
                 myBuilder.append(entities[counter] + ", ")
             }
-            counter++
         }
         return myBuilder.toString()
     }
 
-    fun generateQuery (attributes: Array<String?>, amtOfEnt: String, tableName: String): ArrayList<String>
+    fun generateQuery (attributes: Array<String?>, amtOfEnt: Int, tableName: String): ArrayList<String>
     {
         var att: Array<String>
         var ranName: String
         var counter: Int = 0
         var ran: Random = Random()
         var randNum: Int
-
-        var amtEntered: Int = Integer.valueOf(amtOfEnt)
+        var amtEntered = amtOfEnt
 
         for(x in attributes)
         {
@@ -125,10 +121,9 @@ class Queries
 
                         if(counter==attributes.size-1)
                         {
-
+                            //todo block still needs to be implemented
                         }
                     }
-
                 }
                 counter++
             }
@@ -141,8 +136,7 @@ class Queries
     private fun linkDataQuery(toPassQuery: String, attributes: Array<String?>): ArrayList<String>
     {
         var j: Int = 0
-        var i: Int = 0
-        for(k in (ranNames-1))
+        for((i) in (ranNames-1).withIndex())
         {
            var requiredQuery: StringBuilder = StringBuilder(toPassQuery)
            var insertSB2: StringBuilder = StringBuilder("VALUES (")
@@ -153,37 +147,36 @@ class Queries
                att = attributes[counter]?.split(" ")!!.toTypedArray()
                if(att[1] == "1")
                {
-                   insertQueries.add(requiredQuery.append(insertSB2.append("\n"+"'"+ranNames.get(i) + "'" + ");").toString()).toString())
+                   insertQueries.add(requiredQuery.append(insertSB2.append("\n"+"'"+ ranNames[i] + "'" + ");").toString()).toString())
                }
                else{
-                   insertSB2.append("'" + ranNames.get(i) + "'" + " ,")
+                   insertSB2.append("'" + ranNames[i] + "'" + " ,")
                }
 
-               if(att[1].equals("2"))
+               if(att[1] == "2")
                {
                    if(j==attributes.size-1)
                    {
-                       insertQueries.add(requiredQuery.append(insertSB2.append("'"+ranEmails.get(j) + "'" + ");").toString()).toString());
+                       insertQueries.add(requiredQuery.append(insertSB2.append("'"+ ranEmails[j] + "'" + ");").toString()).toString());
                    }
                    else
                    {
-                       insertSB2.append("'" + ranEmails.get(i) + "'" + " ,");
+                       insertSB2.append("'" + ranEmails[i] + "'" + " ,");
                    }
                }
 
-               if(att[1].equals("3"))
+               if(att[1] == "3")
                {
                    if(j==attributes.size-1)
                    {
-                       insertQueries.add(requiredQuery.append(insertSB2.append("'"+ranDates.get(i) + "'" + ");").toString()).toString());
+                       insertQueries.add(requiredQuery.append(insertSB2.append("'"+ ranDates[i] + "'" + ");").toString()).toString());
                    }
                    else
                    {
-                       insertSB2.append("'" + ranDates.get(i) + "'" + " ,");
+                       insertSB2.append("'" + ranDates[i] + "'" + " ,");
                    }
                }
            }
-            i++
         }
         return insertQueries
     }
@@ -193,9 +186,7 @@ class Queries
         var insertSB1: StringBuilder = StringBuilder("INSERT INTO $tableName( ")
         var att: ArrayList<String>
 
-        var counter: Int = 0
-
-        for(x in attributes)
+        for((counter) in attributes.withIndex())
         {
             att = attributes[counter]?.split(" ") as ArrayList<String>
 
@@ -207,7 +198,6 @@ class Queries
             {
                 insertSB1.append(att[0] + ", ");
             }
-            counter++
         }
         return insertSB1.toString()
     }
