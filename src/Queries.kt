@@ -1,16 +1,16 @@
-
 import java.io.FileReader
 import java.util.*
 
+
 class Queries
 {
-    var names: ArrayList<String> = ArrayList()
-    var emails: ArrayList<String> = ArrayList()
-    var ranNames: ArrayList<String> = ArrayList()
-    var ranEmails: ArrayList<String> = ArrayList()
-    var ranDates: ArrayList<String> = ArrayList()
-    var insertQueries: ArrayList<String> = ArrayList()
-    lateinit var file:Scanner
+    private var names: ArrayList<String> = ArrayList()
+    //var emails: ArrayList<String> = ArrayList()
+    private var ranNames: ArrayList<String> = ArrayList()
+    private var ranEmails: ArrayList<String> = ArrayList()
+    private var ranDates: ArrayList<String> = ArrayList()
+    private var insertQueries: ArrayList<String> = ArrayList()
+    private var file:Scanner
 
     init
     {
@@ -100,11 +100,11 @@ class Queries
         var counter: Int = 0
         var ran: Random = Random()
         var randNum: Int
-        var amtEntered = amtOfEnt
+        var amtEntered = amtOfEnt-1
 
-        for(x in attributes)
+        for((x) in attributes.withIndex())
         {
-            att = attributes[counter]?.split(" ")!!.toTypedArray()
+            att = attributes[x]?.split(" ")!!.toTypedArray()
 
             for(x in 0..amtEntered )
             {
@@ -124,8 +124,23 @@ class Queries
                             //todo block still needs to be implemented
                         }
                     }
+
+                    "2" ->
+                    {
+                        openFile("/Users/Sarthak/Documents/IntelliJ/Kotlin-QuickQuery/resources/MaleFirstNames.Txt")
+                        readFile("MaleFirstNames.Txt")
+                        closeFile()
+
+                        randNum = ran.nextInt(48)
+
+                        val myRandomEmail = java.lang.StringBuilder(names[randNum])
+                        myRandomEmail.append(randEmailDomain())
+                        ranEmails.add(myRandomEmail.toString())
+                    }
+
+                    "3" -> ranDates.add(myRandomDate())
+
                 }
-                counter++
             }
         }
         var toPass: String = requiredQuery(tableName, attributes)
@@ -133,6 +148,48 @@ class Queries
         return linkDataQuery(toPass, attributes)
     }
 
+    private fun randEmailDomain(): String?
+    {
+        val rand = Random()
+        val randNum = rand.nextInt(3)
+
+        val emailDom: String
+
+        when(randNum)
+        {
+            0 ->
+            {
+                emailDom = "@Gmail.com"
+                return emailDom
+            }
+
+            1 ->
+            {
+                emailDom = "@Yahoo.com"
+                return emailDom
+            }
+
+            2 ->
+            {
+                emailDom = "@Outlook.com"
+                return emailDom
+            }
+        }
+
+        return null
+    }
+
+    private fun myRandomDate(): String
+    {
+        var rand = Random()
+        var myRandYear = rand.nextInt(2020 - 2000) + 2000
+        var myRandDay = rand.nextInt(31-1) + 1
+        var myRandMonth = rand.nextInt(12-1) + 1
+
+        var myRandomDate: StringBuilder = StringBuilder("$myRandYear-$myRandMonth-$myRandDay")
+
+    return myRandomDate.toString()
+    }
     private fun linkDataQuery(toPassQuery: String, attributes: Array<String?>): ArrayList<String>
     {
         var j: Int = 0
@@ -142,22 +199,24 @@ class Queries
            var insertSB2: StringBuilder = StringBuilder("VALUES (")
            var att: Array<String>
            var counter = 0
-           for(x in attributes)
+           for((x) in attributes.withIndex())
            {
-               att = attributes[counter]?.split(" ")!!.toTypedArray()
+               att = attributes[x]?.split(" ")!!.toTypedArray()
                if(att[1] == "1")
                {
-                   insertQueries.add(requiredQuery.append(insertSB2.append("\n"+"'"+ ranNames[i] + "'" + ");").toString()).toString())
+                   if(x==attributes.size-1)
+                   {
+                       insertQueries.add(requiredQuery.append(insertSB2.append("\n" + "'" + ranNames[i] + "'" + ");").toString()).toString())
+                   }
+                   else{
+                       insertSB2.append("'" + ranNames[i] + "'" + ",")
+                   }
                }
-               else{
-                   insertSB2.append("'" + ranNames[i] + "'" + " ,")
-               }
-
                if(att[1] == "2")
                {
-                   if(j==attributes.size-1)
+                   if(x==attributes.size-1)
                    {
-                       insertQueries.add(requiredQuery.append(insertSB2.append("'"+ ranEmails[j] + "'" + ");").toString()).toString());
+                       insertQueries.add(requiredQuery.append(insertSB2.append("'"+ ranEmails[i] + "'" + ");").toString()).toString());
                    }
                    else
                    {
@@ -167,7 +226,7 @@ class Queries
 
                if(att[1] == "3")
                {
-                   if(j==attributes.size-1)
+                   if(x==attributes.size-1)
                    {
                        insertQueries.add(requiredQuery.append(insertSB2.append("'"+ ranDates[i] + "'" + ");").toString()).toString());
                    }
