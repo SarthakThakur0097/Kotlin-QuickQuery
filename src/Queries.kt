@@ -185,7 +185,7 @@ class Queries {
                         insertSB2.append("'" + ranEmails[i] + "'" + " ,");
                     }
                 }
-
+reiufhaeiufaew
                 if (att[1] == "3") {
                     if (x == attributes.size - 1) {
                         insertQueries.add(requiredQuery.append(insertSB2.append("'" + ranDates[i] + "'" + ");").toString()).toString());
